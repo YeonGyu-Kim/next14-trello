@@ -6,7 +6,7 @@ export default function DashboardkLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className=''>
+    <div>
       <Navbar />
       {children}
     </div>
