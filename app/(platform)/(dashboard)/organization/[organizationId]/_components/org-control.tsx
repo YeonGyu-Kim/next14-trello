@@ -8,8 +8,6 @@ export default function OrgControl() {
   const params = useParams();
   const { setActive } = useOrganizationList();
 
-  console.log(params);
-
   useEffect(() => {
     if (!setActive) return;
 
