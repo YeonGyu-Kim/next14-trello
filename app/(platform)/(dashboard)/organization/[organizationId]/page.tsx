@@ -1,6 +1,7 @@
 import { createBorad } from '@/actions/create-borad';
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
+import Board from './board';
 
 export default async function OrganizationPage() {
   const boards = await db.board.findMany();
@@ -18,7 +19,7 @@ export default async function OrganizationPage() {
       </form>
       <div className='space-x-2'>
         {boards.map((board) => (
-          <div key={board.id}>Board name: {board.title}</div>
+          <Board key={board.id} title={board.title} id={board.id} />
         ))}
       </div>
     </div>
