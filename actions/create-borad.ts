@@ -6,10 +6,10 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 export type State = {
+  message?: string | null;
   errors?: {
     title?: string[];
   };
-  message?: string | null;
 };
 
 const CreateBoard = z.object({

@@ -7,7 +7,7 @@ import Form from './form';
 export default async function OrganizationPage() {
   const boards = await db.board.findMany();
   return (
-    <div>
+    <div className='flex flex-col space-y-4'>
       <Form />
       <div className='space-x-2'>
         {boards.map((board) => (

@@ -1,6 +1,7 @@
 'use server';
 
 import { db } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
 
 export default async function deleteBoard(id: string) {
   await db.board.delete({
@@ -8,5 +9,5 @@ export default async function deleteBoard(id: string) {
       id,
     },
   });
-  return;
+  revalidatePath('/organization/org_2Zd2qq0W5YLaeVozMECnw4KAW6R');
 }
