@@ -1,48 +1,40 @@
 'use server';
 
 import { db } from '@/lib/db';
+import { auth } from '@clerk/nextjs';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
-import { z } from 'zod';
+import { InputType } from './type';
 
-export type State = {
-  message?: string | null;
-  errors?: {
-    title?: string[];
-  };
-};
+import { createSafeAction } from '@/lib/create-safe-action';
+import { CreateBoard } from './schema';
 
-const CreateBoard = z.object({
-  title: z.string().min(3, {
-    message: '최소 3글자 입니다.',
-  }),
-});
+const handler = async (data: InputType) => {
+  const { userId } = auth();
 
-export async function createBorad(prevState: State, formData: FormData) {
-  const validateFields = CreateBoard.safeParse({
-    title: formData.get('title'),
-  });
-
-  if (!validateFields.success) {
+  if (!userId) {
     return {
-      errors: validateFields.error.flatten().fieldErrors,
-      message: 'Missing fields.',
+      error: 'Unauthorized',
     };
   }
 
-  const { title } = validateFields.data;
+  const { title } = data;
+
+  let board;
 
   try {
-    await db.board.create({
+    board = await db.board.create({
       data: {
         title,
       },
     });
-  } catch (e) {
+  } catch (error) {
     return {
-      message: 'Database Error',
+      error: 'Failed to create.',
     };
   }
-  revalidatePath('/organization/org_2Zd2qq0W5YLaeVozMECnw4KAW6R');
-  redirect('/organization/org_2Zd2qq0W5YLaeVozMECnw4KAW6R');
-}
+
+  revalidatePath(`board/${board.id}`);
+  return { data: board };
+};
+
+export const createBoard = createSafeAction(CreateBoard, handler);
