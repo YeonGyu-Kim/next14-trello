@@ -49,7 +49,7 @@ export default function FormInput(
         <Input
           onBlur={onBlur}
           defaultValue={defaultValue}
-          ref={ref}
+          //ref={ref}
           required={required}
           name={id}
           id={id}
